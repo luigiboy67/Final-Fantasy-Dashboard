@@ -1,33 +1,36 @@
 source("packages.R")
 
 ui <- fluidPage(
-  fluidRow(
-    imageOutput(outputId = "fflogo")
-    ),
-  fluidRow(
     sidebarLayout(
-      sidebarPanel = sidebarPanel(
-        pickerInput("ffdataset",
-                    label = "Choose Dataset",
-                    choices = NULL),
-        pickerInput("ffname",
-                    label = "Choose Monster",
-                    choices = NULL)
+      sidebarPanel = sidebarPanel( width = 2,
+                                   fluidRow(
+                                     imageOutput(outputId = "fflogo", width = "100%", height = "100%")
+                                   ),
+                                   br(),
+        fluidRow(
+                 pickerInput("ffdataset",
+                             label = "Choose Dataset",
+                             choices = NULL),
+                 pickerInput("ffname",
+                             label = "Choose Monster",
+                             choices = NULL)
+
+                 )
       ),
-      mainPanel = mainPanel(
+      mainPanel = mainPanel( width = 10,
         div(imageOutput(outputId = "ffmonster")),
         div(DT::dataTableOutput("ffmonsterdata"))
       ),
       position = "right"
-  ))
+  )
 )
 
 server <- function(input, output, session) {
 
   output$fflogo <- renderImage(
-    list(src = "www/logos/Main-Series/Final-Fantasy-1.webp",
-         width = "250px",
-         height = "100px"
+    list(src = "www/logos/Main-Series/Final-Fantasy-15.webp",
+         width = "100%",
+         height = "100%"
          ),
     deleteFile = FALSE
   )
