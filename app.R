@@ -28,7 +28,7 @@ ui <- fluidPage(
 server <- function(input, output, session) {
 
   output$fflogo <- renderImage(
-    list(src = "www/logos/Main-Series/Final-Fantasy-15.webp",
+    list(src = paste0("www/logos/", input$ffdataset ,".webp"),
          width = "100%",
          height = "100%"
          ),
