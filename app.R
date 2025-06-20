@@ -1,4 +1,5 @@
 source("packages.R")
+source("data-definitions.R")
 
 ui <- fluidPage(
     sidebarLayout(
@@ -27,6 +28,10 @@ ui <- fluidPage(
 
 server <- function(input, output, session) {
 
+  ffrv <- reactiveValues()
+
+  ffrv$ffdatasets <- ffdatasets
+
   output$fflogo <- renderImage(
     list(src = paste0("www/logos/", input$ffdataset ,".webp"),
          width = "100%",
@@ -34,6 +39,14 @@ server <- function(input, output, session) {
          ),
     deleteFile = FALSE
   )
+  observeEvent(ffrv$ffdatasets, {
+    updatePickerInput(
+      session,
+      "ffdataset",
+      label = "Choose Dataset",
+      choices = ffrv$ffdatasets
+    )
+  })
 }
 
 shiny::shinyApp(
