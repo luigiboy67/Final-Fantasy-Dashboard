@@ -30,7 +30,8 @@ server <- function(input, output, session) {
 
   ffrv <- reactiveValues()
 
-  ffrv$ffdatasets <- ffdatasets
+  ffrv$ffdatasets <- names(ffdatasets)
+
 
   output$fflogo <- renderImage(
     list(src = paste0("www/logos/", input$ffdataset ,".webp"),
@@ -46,7 +47,21 @@ server <- function(input, output, session) {
       label = "Choose Dataset",
       choices = ffrv$ffdatasets
     )
+    print(ffrv$datasets)
   })
+
+  observeEvent(input$ffdatasets, {
+    ffrv$datasets <- input$ffdatasets
+  })
+
+  # observeEvent(input$ffdataset,{
+  #   updatePickerInput(
+  #     session,
+  #     "ffname",
+  #     label = "Choose Monster",
+  #     choice = ffrv$name
+  #   )
+  # })
 }
 
 shiny::shinyApp(
