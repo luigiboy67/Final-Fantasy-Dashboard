@@ -20,7 +20,7 @@ ui <- fluidPage(
       )
       ),
       mainPanel = mainPanel( width = 10,
-        div(imageOutput(outputId = "ffmonster")),
+        div(imageOutput(outputId = "ffmonster"), width = "20%", height = "100%"),
         div(DT::dataTableOutput("ffmonsterdata"))
       ),
       position = "right"
@@ -40,6 +40,14 @@ server <- function(input, output, session) {
          width = "100%",
          height = "100%"
          ),
+    deleteFile = FALSE
+  )
+
+  output$ffmonster <- renderImage(
+    list(src = paste0("www/",input$ffdataset, "/", input$ffname ,".webp"),
+         width = "20%",
+         height = "100%"
+    ),
     deleteFile = FALSE
   )
   # observeEvent(ffrv$ffdatasets, {
