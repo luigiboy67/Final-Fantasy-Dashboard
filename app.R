@@ -21,7 +21,7 @@ ui <- fluidPage(
       ),
       mainPanel = mainPanel( width = 10,
         div(imageOutput(outputId = "ffmonster"), width = "20%", height = "100%"),
-        div(DT::dataTableOutput("ffmonsterdata"))
+        div(tableOutput("ffmonsterdata"))
       ),
       position = "right"
   )
@@ -50,6 +50,9 @@ server <- function(input, output, session) {
     ),
     deleteFile = FALSE
   )
+
+  output$ffmonsterdata <- renderTable(ffdatasets$Final_Fantasy_I[ffdatasets$Final_Fantasy_I$Name == input$ffname,])
+
   # observeEvent(ffrv$ffdatasets, {
   #   updatePickerInput(
   #     session,
