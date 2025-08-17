@@ -11,7 +11,7 @@ ui <- fluidPage(
         fluidRow(
                  pickerInput("ffdataset",
                              label = "Choose Dataset",
-                             choices = names(ffdatasets[c(-2,-11,-12)])
+                             choices = names(ffdatasets)
                              ),
                  pickerInput("ffname",
                              label = "Choose Monster",
@@ -19,9 +19,17 @@ ui <- fluidPage(
                              )
       )
       ),
-      mainPanel = mainPanel( width = 10,
-        div(imageOutput(outputId = "ffmonster"), width = "20%", height = "100%"),
-        div(tableOutput("ffmonsterdata"))
+      mainPanel = mainPanel(width = 10,
+        fluidRow(
+          column(width = 12,
+                 div(imageOutput(outputId = "ffmonster"), width = "20%", height = "100%")
+                 )
+        ),
+        fluidRow(
+          column(width = 12,
+                 div(tableOutput("ffmonsterdata"))
+                 )
+        )
       ),
       position = "right"
   )
@@ -34,15 +42,8 @@ server <- function(input, output, session) {
       switch(
         input$ffdataset,
         "Final_Fantasy_I" = purrr::pluck(ffdatasets,1, 1) |> unique(),
-        "Final_Fantasy_III" = purrr::pluck(ffdatasets,3, 1) |> unique(),
-        "Final_Fantasy_IV" = purrr::pluck(ffdatasets,4, 1) |> unique(),
-        "Final_Fantasy_V" = purrr::pluck(ffdatasets,5, 1) |> unique(),
-        "Final_Fantasy_VI" = purrr::pluck(ffdatasets,6, 1) |> unique(),
-        "Final_Fantasy_VII" = purrr::pluck(ffdatasets,7, 1) |> unique(),
-        "Final_Fantasy_VIII" = purrr::pluck(ffdatasets,8, 1) |> unique(),
-        "Final_Fantasy_IX" = purrr::pluck(ffdatasets,9, 1) |> unique(),
-        "Final_Fantasy_X" = purrr::pluck(ffdatasets,10, 1) |> unique(),
-        "Final_Fantasy_XV" = purrr::pluck(ffdatasets,13, 1) |> unique()
+        "Final_Fantasy_III" = purrr::pluck(ffdatasets,2, 1) |> unique(),
+        "Final_Fantasy_IV" = purrr::pluck(ffdatasets,3, 1) |> unique()
       )
   })
 
@@ -51,14 +52,7 @@ server <- function(input, output, session) {
       input$ffdataset,
       "Final_Fantasy_I" = subset(ffdatasets$Final_Fantasy_I, Name == input$ffname),
       "Final_Fantasy_III" = subset(ffdatasets$Final_Fantasy_III, Name == input$ffname),
-      "Final_Fantasy_IV" = subset(ffdatasets$Final_Fantasy_IV, Name == input$ffname),
-      "Final_Fantasy_V" = subset(ffdatasets$Final_Fantasy_V, Name == input$ffname),
-      "Final_Fantasy_VI" = subset(ffdatasets$Final_Fantasy_VI, Name == input$ffname),
-      "Final_Fantasy_VII" = subset(ffdatasets$Final_Fantasy_VII, Name == input$ffname),
-      "Final_Fantasy_VIII"= subset(ffdatasets$Final_Fantasy_VIII, Name == input$ffname),
-      "Final_Fantasy_IX" = subset(ffdatasets$Final_Fantasy_IX, Name == input$ffname),
-      "Final_Fantasy_X" = subset(ffdatasets$Final_Fantasy_X, Name == input$ffname),
-      "Final_Fantasy_XV" = subset(ffdatasets$Final_Fantasy_XV, Name == input$ffname)
+      "Final_Fantasy_IV" = subset(ffdatasets$Final_Fantasy_IV, Name == input$ffname)
     )
   })
 
@@ -90,22 +84,6 @@ server <- function(input, output, session) {
   )
 
   output$ffmonsterdata <- renderTable(ffmonsterdata())
-
-  # observeEvent(ffrv$ffdatasets, {
-  #   updatePickerInput(
-  #     session,
-  #     "ffdataset",
-  #     label = "Choose Dataset",
-  #     choices = ffrv$ffdatasets
-  #   )
-  # })
-  #
-  # observeEvent(input$ffdataset, {
-  #   ffrv$datasets <- input$ffdataset
-  # })
-  #
-  observe(print(input$ffdataset))
-  # observe(print(ffmonsterdata()))
 }
 
 shiny::shinyApp(
