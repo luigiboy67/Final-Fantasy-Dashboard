@@ -1,40 +1,26 @@
 source("packages.R")
 source("data-definitions.R")
 
-ui <- fluidPage(
-    sidebarLayout(
-      sidebarPanel = sidebarPanel(width = 2,
-                                   fluidRow(
-                                     imageOutput(outputId = "fflogo", width = "100%", height = "100%")
-                                   ),
-                                   br(),
-        fluidRow(
-                 pickerInput("ffdataset",
-                             label = "Choose Dataset",
-                             choices = names(ffdatasets)
-                             ),
-                 pickerInput("ffname",
-                             label = "Choose Monster",
-                             choices = purrr::pluck(ffdatasets,1, 1) |> unique()
-                             )
-      )
-      ),
-      mainPanel = mainPanel(width = 10,
-        fluidRow(
-          column(width = 12,
-                 div(imageOutput(outputId = "ffmonster"), width = "20%", height = "100%")
-                 )
-        ),
-        fluidRow(
-          column(width = 12,
-                 div(tableOutput("ffmonsterdata"))
-                 )
-        )
-      ),
-      position = "right"
-  )
-)
-
+ui <- page_sidebar(
+                    title = "Final Fantasy Dashboard",
+                    sidebar = sidebar( position = "right",
+                      imageOutput(outputId = "fflogo", width = "100%", height = "100%"),
+                      pickerInput("ffdataset",
+                                  label = "Choose Dataset",
+                                  choices = names(ffdatasets)
+                      ),
+                      pickerInput("ffname",
+                                  label = "Choose Monster",
+                                  choices = purrr::pluck(ffdatasets,1, 1) |> unique()
+                      )
+                    ),
+                    card(
+                      div(imageOutput(outputId = "ffmonster"), width = "50%", height = "100%", fill = TRUE)
+                      ),
+                    card(
+                      div(tableOutput("ffmonsterdata"))
+                    )
+                  )
 server <- function(input, output, session) {
   session$onSessionEnded(function() { stopApp() })
 
@@ -67,7 +53,7 @@ server <- function(input, output, session) {
 
   output$ffmonster <- renderImage(
     list(src = paste0("www/",input$ffdataset, "/", input$ffname ,".webp"),
-         width = "20%",
+         width = "50%",
          height = "100%"
     ),
     deleteFile = FALSE
