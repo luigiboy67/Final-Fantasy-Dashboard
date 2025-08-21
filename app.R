@@ -14,11 +14,16 @@ ui <- page_sidebar(
                                   choices = purrr::pluck(ffdatasets,1, 1) |> unique()
                       )
                     ),
+                    column(width = 4,
                     card(
-                      div(imageOutput(outputId = "ffmonster"), width = "50%", height = "100%", fill = TRUE)
-                      ),
-                    card(
-                      div(tableOutput("ffmonsterdata"))
+                      div(imageOutput(outputId = "ffmonster"), width = "100%", height = "100%", fill = TRUE)
+                      )
+                    ),
+                    column(
+                      width = 6,
+                      card(
+                        div(tableOutput("ffmonsterdata"))
+                      )
                     )
                   )
 server <- function(input, output, session) {
@@ -53,7 +58,7 @@ server <- function(input, output, session) {
 
   output$ffmonster <- renderImage(
     list(src = paste0("www/",input$ffdataset, "/", input$ffname ,".webp"),
-         width = "50%",
+         width = "100%",
          height = "100%"
     ),
     deleteFile = FALSE
@@ -69,7 +74,9 @@ server <- function(input, output, session) {
   }
   )
 
-  output$ffmonsterdata <- renderTable(ffmonsterdata())
+  output$ffmonsterdata <- renderTable(ffmonsterdata(),
+                                      width = "100%"
+                                      )
 }
 
 shiny::shinyApp(
