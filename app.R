@@ -14,10 +14,18 @@ ui <- page_sidebar(
                                   choices = purrr::pluck(ffdatasets,1, 1) |> unique()
                       )
                     ),
+                    fluidRow(
                     column(width = 4,
                     card(
                       div(imageOutput(outputId = "ffmonster"), width = "100%", height = "100%", fill = TRUE)
                       )
+                    ),
+                    column(
+                      width = 4,
+                      card(
+                      div(imageOutput(outputId = "ffgif"), width = "100%", height = "100%", fill = TRUE)
+                      )
+                    )
                     ),
                     column(
                       width = 6,
@@ -34,7 +42,8 @@ server <- function(input, output, session) {
         input$ffdataset,
         "Final_Fantasy_I" = purrr::pluck(ffdatasets,1, 1) |> unique(),
         "Final_Fantasy_III" = purrr::pluck(ffdatasets,2, 1) |> unique(),
-        "Final_Fantasy_IV" = purrr::pluck(ffdatasets,3, 1) |> unique()
+        "Final_Fantasy_IV" = purrr::pluck(ffdatasets,3, 1) |> unique(),
+        "Final_Fantasy_VI" = purrr::pluck(ffdatasets,4, 1) |> unique(),
       )
   })
 
@@ -43,7 +52,8 @@ server <- function(input, output, session) {
       input$ffdataset,
       "Final_Fantasy_I" = subset(ffdatasets$Final_Fantasy_I, Name == input$ffname),
       "Final_Fantasy_III" = subset(ffdatasets$Final_Fantasy_III, Name == input$ffname),
-      "Final_Fantasy_IV" = subset(ffdatasets$Final_Fantasy_IV, Name == input$ffname)
+      "Final_Fantasy_IV" = subset(ffdatasets$Final_Fantasy_IV, Name == input$ffname),
+      "Final_Fantasy_VI" = subset(ffdatasets$Final_Fantasy_VI, Name == input$ffname)
     )
   })
 
@@ -59,10 +69,18 @@ server <- function(input, output, session) {
   output$ffmonster <- renderImage(
     list(src = paste0("www/",input$ffdataset, "/", input$ffname ,".webp"),
          width = "100%",
+         height = "100%"),
+    deleteFile = FALSE
+  )
+
+  output$ffgif <- renderImage(
+    list(src = paste0("www/gif/",input$ffdataset, ".gif"),
+         width = "100%",
          height = "100%"
     ),
     deleteFile = FALSE
   )
+
 
   observeEvent(ffmonsternames(), {
     updatePickerInput(
